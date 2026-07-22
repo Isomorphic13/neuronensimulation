@@ -9,6 +9,7 @@ def euler_method(x_0 : np.ndarray, t_a : float, t_b : float, dt : float, voltage
     :param t_b: end time
     :param dt: time step
     :param voltage_0: inital voltage value
+    :param I: current at the time
     :param tuple_of_constants: tuple that contains all necessary for the HHM constants
     :return: numerical values of voltage inside a single cell in time period [t_a, t_b] in form of numpy array
     '''
@@ -19,9 +20,9 @@ def euler_method(x_0 : np.ndarray, t_a : float, t_b : float, dt : float, voltage
     x = x_0
     for t in t_points:
         voltage_points.append(v)
-        x, v = x + dt * eq.f_gating(x, v), v + dt * eq.f_V(x = x, voltage= v, I = I, tuple_of_constants = tuple_of_constants)
+        x, v = x + dt * eq.f_gating(x, v), v + dt * eq.f_V(x=x, v=v, I=I, tuple_of_constants=tuple_of_constants)
 
-    return np.array(voltage_points) #rows represent collection of values n,m,h at some time t_0, whereas columns represent values of a single function in the whole time interval
+    return np.array(voltage_points)
 
 
 

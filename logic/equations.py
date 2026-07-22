@@ -35,7 +35,7 @@ def f_gating(x : np.ndarray, voltage: float) -> np.ndarray:
     return np.array([diff_eq_n(voltage, x[0]) , diff_eq_m(voltage, x[1]), diff_eq_h(voltage, x[2])])
 
 #Function representing the differential equation dV/dt = f_V(n(V), m(V), h(V), V(t), t) for voltage
-def f_V(x : np.ndarray, voltage, I, tuple_of_constants : tuple[float] ) -> float:
+def f_V(x : np.ndarray, v, I, tuple_of_constants : tuple[float] ) -> float:
     C = tuple_of_constants[0]
     G_K = tuple_of_constants[1]
     G_NA = tuple_of_constants[2]
@@ -47,4 +47,4 @@ def f_V(x : np.ndarray, voltage, I, tuple_of_constants : tuple[float] ) -> float
     n = x[0]
     m = x[1]
     h = x[2]
-    return (I - G_K * (n**4) * (voltage - V_K) - G_NA * (m ** 3) * h * (voltage - V_NA) - G_L * (voltage - V_L)) / C
+    return (I - G_K * (n**4) * (v - V_K) - G_NA * (m ** 3) * h * (v - V_NA) - G_L * (v - V_L)) / C
