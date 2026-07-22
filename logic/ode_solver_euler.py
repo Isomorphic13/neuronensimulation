@@ -1,7 +1,9 @@
+from typing import Callable
+
 from . import equations as eq
 import numpy as np
 
-def euler_method(x_0 : np.ndarray, t_a : float, t_b : float, dt : float, I, tuple_of_constants : tuple[float]) -> np.ndarray:
+def euler_method(x_0 : np.ndarray, t_a : float, t_b : float, dt : float, I : Callable[[float], float], tuple_of_constants : tuple[float]) -> np.ndarray:
     '''
     The functiom calculates numerical values for voltage V in HHM for a single cell under some current I. The function uses the Euler methode for calculation
     :param x_0: initial values for voltage V and gating variables n,m,h
@@ -18,7 +20,8 @@ def euler_method(x_0 : np.ndarray, t_a : float, t_b : float, dt : float, I, tupl
     x = x_0.copy()
     for t in t_points:
         values_of_functions.append(x)
-        x = x + dt * eq.equations_vector(x=x, I=I, tuple_of_constants=tuple_of_constants)
+        I_current = I(t)
+        x = x + dt * eq.equations_vector(x=x, I=I_current, tuple_of_constants=tuple_of_constants)
     return np.array(values_of_functions)
 
 

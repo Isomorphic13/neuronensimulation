@@ -55,3 +55,6 @@ def equations_vector(x : np.ndarray, I, tuple_of_constants : tuple[float] ) -> n
           - G_L * (voltage - V_L)) / C
 
     return np.array([dvdt, dndt, dmdt, dhdt])
+
+def I_pulse(t, I0=-5, I_imp=50, t_start=10, t_end=11):
+    return I_imp if t_start <= t <= t_end else I0
