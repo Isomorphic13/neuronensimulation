@@ -1,6 +1,6 @@
 from typing import Callable
 
-from . import equations as eq
+from aufgabe2 import equations as eq
 import numpy as np
 
 def runge_kutta_method(x_0 : np.ndarray, t_a : float, t_b : float, dt : float, I : Callable[[float], float], tuple_of_constants : tuple[float]) -> np.ndarray:
