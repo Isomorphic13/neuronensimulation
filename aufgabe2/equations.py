@@ -1,7 +1,9 @@
 from math import exp
 import numpy as np
 
-
+"""
+The module contains differential equations from the Hodgkin-Huxley model that are used for later numerical calculations 
+"""
 def alpha_n (voltage):
     return -0.01 * (55 + voltage) / (exp(-(55 + voltage) / 10) - 1)
 
@@ -32,8 +34,15 @@ def diff_eq_h(voltage,h):
 
 
 
-#Function representing the differential equation dV/dt = f_V(n(V), m(V), h(V), V(t), t) for voltage and dn/dt, dm/dt, dh/dt
-def equations_vector(x : np.ndarray, I, tuple_of_constants : tuple[float] ) -> np.ndarray:
+
+def equations_vector(x_0 : np.ndarray, I, tuple_of_constants : tuple[float] ) -> np.ndarray:
+    """
+    This function calculates the value differential equations dy/dx = f(y,x) for the Hodgkin-Huxley model for some time t. y is the state vector for the system.
+    :param x_0: initial conditions for the system. The structure is given in the form [V, n, m, h]. Where V is voltage and n, m , h are the gating variables.
+    :param I: outer current applied to the cell.
+    :param tuple_of_constants: set of constant, which are used for the differential equation dV/dt =
+    :return: state of the system as [V, n, m, h].
+    """
     C = tuple_of_constants[0]
     G_K = tuple_of_constants[1]
     G_NA = tuple_of_constants[2]
@@ -42,8 +51,8 @@ def equations_vector(x : np.ndarray, I, tuple_of_constants : tuple[float] ) -> n
     V_NA = tuple_of_constants[5]
     V_L = tuple_of_constants[6]
 
-    voltage = x[0]
-    n, m, h = x[1], x[2], x[3]
+    voltage = x_0[0]
+    n, m, h = x_0[1], x_0[2], x_0[3]
 
     dndt = diff_eq_n(voltage=voltage, n=n)
     dmdt = diff_eq_m(voltage=voltage, m=m)
