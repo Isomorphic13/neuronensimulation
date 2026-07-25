@@ -1,3 +1,9 @@
+from math import exp
+
+import numpy as np
+from traitlets import Callable
+import aufgabe2.equations as eq
+from scipy.interpolate import interp1d
 
 import numpy as np
 from traitlets import Callable
