@@ -1,9 +1,3 @@
-from math import exp
-
-import numpy as np
-from traitlets import Callable
-import aufgabe2.equations as eq
-from scipy.interpolate import interp1d
 
 import numpy as np
 from traitlets import Callable
@@ -22,7 +16,7 @@ class Neuron:
     """
 
     def __init__(self):
-        self.initial_state = np.array([-65,0.6, 0.5, 0.4])
+        self.initial_state = np.array([-65,0.6, 0.2, 0.75])
         self.time_array = np.arange(0, 50, 0.01)
         self.tuple_of_constants = (1, 36, 120, 0.3, -77, 50, -54.387)
 
@@ -43,10 +37,11 @@ class Neuron:
         interp_current = interp1d(self.time_array, current_function, kind='linear', fill_value='extrapolate')
 
         #defining the system of ODEs using aufgabe2.equations, where the equations are stored in callable form.
-        def _hh_system(initail_state, t, interp_current, tuple_of_constants: tuple[float]):
+        def _hh_system(initial_state, t, interp_current, tuple_of_constants: tuple[float]):
             # Evaluate the current at the current time t
+
             current_t = interp_current(t)
-            return eq.equations_vector(initail_state, current_t, tuple_of_constants)
+            return eq.equations_vector(initial_state, current_t, tuple_of_constants)
 
         #calculation the voltage values over time period self.time_array
         solution = spi.odeint(
@@ -58,3 +53,4 @@ class Neuron:
 
         #the first of the solution contains the values of the membrane voltage.
         return solution[:, 0]
+
