@@ -11,14 +11,20 @@ def get_set_of_boards() -> np.ndarray:
 def get_set_of_chess_boards() -> np.ndarray:
     return np.array([[[1,0],[0,1]], [[0,1],[1,0]]])
 
-
-
 def get_set_of_non_chess_boards() -> np.ndarray:
     return np.array([
         [[0, 0], [0, 0]], [[0, 0], [0, 1]], [[0, 0], [1, 0]], [[0, 0], [1, 1]],
         [[0, 1], [0, 0]], [[0, 1], [0, 1]],                   [[0, 1], [1, 1]],
         [[1, 0], [0, 0]],                   [[1, 0], [1, 0]], [[1, 0], [1, 1]],
         [[1, 1], [0, 0]], [[1, 1], [0, 1]], [[1, 1], [1, 0]], [[1, 1], [1, 1]]
+    ])
+
+def get_targets() -> np.ndarray:
+    return np.array([
+        0, 0, 0, 0,
+        0, 0, 1, 0,
+        0, 1, 0, 0,
+        0, 0, 0, 0,
     ])
 
 
