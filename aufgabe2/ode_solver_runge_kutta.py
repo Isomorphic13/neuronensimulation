@@ -5,7 +5,7 @@ import numpy as np
 from numba import njit
 
 """
-The module implements the Runge-Kutta method for numerical solving system ordinary differential equations from Hodgkin-Huxley model (HHM).
+The module implements the Runge-Kutta method for numerical solving of system ordinary differential equations from Hodgkin-Huxley model (HHM).
 """
 
 
@@ -40,6 +40,16 @@ def runge_kutta_method(x_0 : np.ndarray, t_a : float, t_b : float, dt : float, I
 
 @njit
 def runge_kutta_method_matrix(x_0 : np.ndarray, time_array : np.ndarray, dt : float, eigen_current :np.ndarray, weights_matrix: np.ndarray, tuple_of_constants : tuple) -> np.ndarray:
+    '''
+
+    :param x_0: inital state matrix. Each row corresponds to the inital state of a single cell.
+    :param time_array: time interval
+    :param dt: time step
+    :param eigen_current: the current that each cell becomes without considering the currents from other cells.
+    :param weights_matrix: matrix that is used to find the current state of the network according to i = Wv. The matrix contains information about the topology of a network.
+    :param tuple_of_constants: tuple that contains all necessary for the HHM constants.
+    :return: tensor of neuronal network over time. It has structure [time t, [state of all neurons in time t]]. [state of all neurons in time t] = [[state_of_neuron1], [state_of_neuron2], ...]
+    '''
     values_of_functions = np.empty(
         (len(time_array), x_0.shape[0], x_0.shape[1]),
         dtype=np.float64
@@ -48,14 +58,14 @@ def runge_kutta_method_matrix(x_0 : np.ndarray, time_array : np.ndarray, dt : fl
     x = x_0.copy()
 
     for i in range(len(time_array)):
-        # Store current state
+
         values_of_functions[i, :, :] = x
 
-        # Calculate current
+        # Calculate the current vector
         outer_current = weights_matrix @ x[0, :]
         total_current = outer_current + eigen_current
 
-        # RK4
+
         k1 = dt * eq.equations_matrix(
             x_0=x,
             I=total_current,

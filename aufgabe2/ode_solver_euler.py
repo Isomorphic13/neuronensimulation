@@ -4,7 +4,7 @@ from aufgabe2 import equations as eq
 import numpy as np
 
 """
-The module implements the Euler method for numerical solving system ordinary differential equations from Hodgkin-Huxley model (HHM).
+The module implements the Euler method for numerical solving of system ordinary differential equations from Hodgkin-Huxley model (HHM).
 """
 
 def euler_method(x_0 : np.ndarray, t_a : float, t_b : float, dt : float, I : Callable[[float], float], tuple_of_constants : tuple[float]) -> np.ndarray:

@@ -1,8 +1,7 @@
 import numpy as np
-from aufgabe3.neuron import Neuron
 from aufgabe2.ode_solver_runge_kutta import runge_kutta_method_matrix
 
-class NN:
+class NeuralNetwork:
     def __init__(self, weights : np.ndarray, number_of_layers, neurons_in_layer):
         self.weights = weights
         self.weights_matrix = self._set_weights_matrix()
@@ -39,7 +38,7 @@ class NN:
     def input_board(self, board_input: np.ndarray):
         self.board = board_input
 
-    def _set_weights_matrix(self) -> np.ndarray:
+    def _set_weights_matrix(self) -> np.ndarray: #adjust, if you change the topology of neuronal network
         w_12 = self.weights[0]
         w_34 = self.weights[1]
         w_15 = self.weights[2]
