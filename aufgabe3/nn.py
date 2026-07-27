@@ -30,6 +30,7 @@ class NN:
 
     def set_weights(self, weights : np.ndarray):
         self.weights = weights
+        self.weights_matrix = self._set_weights_matrix()
 
     def set_currents_for_pixels(self, current_for_white, current_for_black):
         self.current_for_white = current_for_white
@@ -66,6 +67,8 @@ class NN:
                 k = k + 1
         return eigen_current
 
+    def get_weights(self):
+        return self.weights
 
     def get_state_matrix(self) -> np.ndarray:
         initial_state_matrix = np.tile(self.initial_state[:, None], (1, self.number_of_layers * self.neurons_in_layer + 1))

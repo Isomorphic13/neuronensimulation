@@ -38,22 +38,48 @@ def runge_kutta_method(x_0 : np.ndarray, t_a : float, t_b : float, dt : float, I
     return np.array(values_of_functions)
 
 
-
+@njit
 def runge_kutta_method_matrix(x_0 : np.ndarray, time_array : np.ndarray, dt : float, eigen_current :np.ndarray, weights_matrix: np.ndarray, tuple_of_constants : tuple) -> np.ndarray:
-    values_of_functions = []
+    values_of_functions = np.empty(
+        (len(time_array), x_0.shape[0], x_0.shape[1]),
+        dtype=np.float64
+    )
+
     x = x_0.copy()
 
-    for t in time_array:
-        values_of_functions.append(x)
+    for i in range(len(time_array)):
+        # Store current state
+        values_of_functions[i, :, :] = x
 
-        outer_current = weights_matrix @ x[0, 0:]
+        # Calculate current
+        outer_current = weights_matrix @ x[0, :]
         total_current = outer_current + eigen_current
 
-        k1 = dt * eq.equations_matrix(x_0=x, I=total_current, tuple_of_constants=tuple_of_constants)
-        k2 = dt * eq.equations_matrix(x_0=x + k1 / 2, I=total_current, tuple_of_constants=tuple_of_constants)
-        k3 = dt * eq.equations_matrix(x_0=x + k2 / 2, I=total_current, tuple_of_constants=tuple_of_constants)
-        k4 = dt * eq.equations_matrix(x_0=x + k3, I=total_current, tuple_of_constants=tuple_of_constants)
+        # RK4
+        k1 = dt * eq.equations_matrix(
+            x_0=x,
+            I=total_current,
+            tuple_of_constants=tuple_of_constants
+        )
 
-        x = x + (k1 + 2 * k2 + 2 * k3 + k4) / 6
+        k2 = dt * eq.equations_matrix(
+            x_0=x + k1 / 2.0,
+            I=total_current,
+            tuple_of_constants=tuple_of_constants
+        )
 
-    return np.array(values_of_functions)
+        k3 = dt * eq.equations_matrix(
+            x_0=x + k2 / 2.0,
+            I=total_current,
+            tuple_of_constants=tuple_of_constants
+        )
+
+        k4 = dt * eq.equations_matrix(
+            x_0=x + k3,
+            I=total_current,
+            tuple_of_constants=tuple_of_constants
+        )
+
+        x += (k1 + 2.0 * k2 + 2.0 * k3 + k4) / 6.0
+
+    return values_of_functions

@@ -6,31 +6,32 @@ from numba import njit
 """
 The module contains differential equations from the Hodgkin-Huxley model that are used for later numerical calculations 
 """
+@njit
 def alpha_n (voltage):
     return -0.01 * (55 + voltage) / (np.exp(-(55 + voltage) / 10) - 1)
-
+@njit
 def alpha_m (voltage):
     return -0.1 * (40 + voltage) / (np.exp(-(40 + voltage) / 10) - 1)
-
+@njit
 def alpha_h (voltage):
     return 0.07 * np.exp(-(65 + voltage) / 20)
-
+@njit
 def beta_n (voltage):
     return 0.125 *np.exp(-(65 + voltage) / 80)
-
+@njit
 def beta_m (voltage):
     return 4 * np.exp(-(65 + voltage) / 18)
-
+@njit
 def beta_h (voltage):
     return 1 / (np.exp(-(35 + voltage) / 10) + 1)
 
-
+@njit
 def diff_eq_n(voltage,n):
     return alpha_n(voltage) * (1 - n) - beta_n(voltage) * n
-
+@njit
 def diff_eq_m(voltage,m):
     return alpha_m(voltage) * (1 - m) - beta_m(voltage) * m
-
+@njit
 def diff_eq_h(voltage,h):
     return alpha_h(voltage) * (1 - h) - beta_h(voltage) * h
 
@@ -68,7 +69,7 @@ def equations_vector(x_0 : np.ndarray, I, tuple_of_constants : tuple[float] ) ->
     return np.array([dvdt, dndt, dmdt, dhdt])
 
 
-
+@njit
 def equations_matrix(x_0 : np.ndarray, I, tuple_of_constants : tuple[float] ) -> np.ndarray:
     C = tuple_of_constants[0]
     G_K = tuple_of_constants[1]
@@ -90,4 +91,11 @@ def equations_matrix(x_0 : np.ndarray, I, tuple_of_constants : tuple[float] ) ->
             - G_NA * (m ** 3) * h * (voltage - V_NA)
             - G_L * (voltage - V_L)) / C
 
-    return np.array([dvdt, dndt, dmdt, dhdt])
+    result = np.empty_like(x_0)
+
+    result[0, :] = dvdt
+    result[1, :] = dndt
+    result[2, :] = dmdt
+    result[3, :] = dhdt
+
+    return result
