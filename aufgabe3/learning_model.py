@@ -76,7 +76,7 @@ def learn(number_of_iterations, perturbation_factor, number_of_layers,
         errors_history.append(error)
 
         perturbation = np.random.normal(0, perturbation_factor, size=size)
-        shifted_weights = neuronal_network.weights + perturbation
+        shifted_weights = old_weights + perturbation
         shifted_weights = np.clip(shifted_weights, -bounce_for_parameters, bounce_for_parameters)
         neuronal_network.set_weights(shifted_weights)
 
@@ -87,12 +87,15 @@ def learn(number_of_iterations, perturbation_factor, number_of_layers,
 
         weights_history.append(neuronal_network.get_weights().copy())
 
-    np.save("optimal_weights.npy", neuronal_network.get_weights().copy())
-    np.save("notebook/errors_history.npy", np.array(errors_history))
+
+
+    np.save("weights_history1.npy", np.array(weights_history).copy())
+    np.save("notebook/errors_history.npy", np.array(errors_history).copy())
+    np.save("notebook/optimal_weights.npy", neuronal_network.get_weights().copy())
 
 
 if __name__ == "__main__":
-    learn(number_of_iterations=100, perturbation_factor=0.01, number_of_layers=2, neurons_in_layer=2,
+    learn(number_of_iterations=400, perturbation_factor=0.01, number_of_layers=2, neurons_in_layer=2,
           bounce_for_parameters=0.15)
 
 

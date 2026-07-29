@@ -41,7 +41,6 @@ def runge_kutta_method(x_0 : np.ndarray, t_a : float, t_b : float, dt : float, I
 @njit
 def runge_kutta_method_matrix(x_0 : np.ndarray, time_array : np.ndarray, dt : float, eigen_current :np.ndarray, weights_matrix: np.ndarray, tuple_of_constants : tuple) -> np.ndarray:
     '''
-
     :param x_0: inital state matrix. Each row corresponds to the inital state of a single cell.
     :param time_array: time interval
     :param dt: time step
@@ -65,31 +64,26 @@ def runge_kutta_method_matrix(x_0 : np.ndarray, time_array : np.ndarray, dt : fl
         outer_current = weights_matrix @ x[0, :]
         total_current = outer_current + eigen_current
 
-
         k1 = dt * eq.equations_matrix(
             x_0=x,
             I=total_current,
             tuple_of_constants=tuple_of_constants
         )
-
         k2 = dt * eq.equations_matrix(
             x_0=x + k1 / 2.0,
             I=total_current,
             tuple_of_constants=tuple_of_constants
         )
-
         k3 = dt * eq.equations_matrix(
             x_0=x + k2 / 2.0,
             I=total_current,
             tuple_of_constants=tuple_of_constants
         )
-
         k4 = dt * eq.equations_matrix(
             x_0=x + k3,
             I=total_current,
             tuple_of_constants=tuple_of_constants
         )
-
         x += (k1 + 2.0 * k2 + 2.0 * k3 + k4) / 6.0
 
     return values_of_functions

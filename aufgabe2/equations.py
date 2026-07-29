@@ -7,9 +7,6 @@ from math import exp
 """
 The module contains differential equations from the Hodgkin-Huxley model that are used for later numerical calculations 
 """
-import numpy as np
-from numba import njit
-
 '''
 These are equations for coefficients alpha(V), beta(V) as well as differential equations for the gating variables f_n, f_m , f_h.
 There is two form of this equations, for scalers and 1D - ndarrays. They are used depending on whether you calculate state of a single neuron or the whole neuronal network.

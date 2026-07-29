@@ -211,13 +211,21 @@ def visualize_weights_history(weights_history):
 
     time = np.arange(matrix.shape[0])
 
+    weight_labels = []
+    weight_labels.append("$w_{12}$")
+    weight_labels.append("$w_{34}$")
+    weight_labels.append("$w_{15}$")
+    weight_labels.append("$w_{25}$")
+    weight_labels.append("$w_{35}$")
+    weight_labels.append("$w_{45}$")
+
     plt.figure(figsize=(10, 6))
     for col in range(matrix.shape[1]):
-        plt.plot(time, matrix[:, col])
+        plt.plot(time, matrix[:, col], label=weight_labels[col])
 
     plt.xlabel("Anzahl der Iterationen")
-    plt.ylabel("Gewichtungengrößen")
-    plt.title("Verlauf der Gewichtungengrößen")
+    plt.ylabel("Gewichtungsgrößen")
+    plt.title("Verlauf der Gewichtungsgrößen $w_{ij}$ während des Lernverfahrens.")
     plt.legend()
     plt.grid(True)
     plt.show()

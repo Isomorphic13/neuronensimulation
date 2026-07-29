@@ -38,7 +38,7 @@ class NeuralNetwork:
     def input_board(self, board_input: np.ndarray):
         self.board = board_input
 
-    def _set_weights_matrix(self) -> np.ndarray: #adjust, if you change the topology of neuronal network
+    def _set_weights_matrix(self) -> np.ndarray: #adjust, if you change the topology of neural network
         w_12 = self.weights[0]
         w_34 = self.weights[1]
         w_15 = self.weights[2]
@@ -53,8 +53,7 @@ class NeuralNetwork:
             [w_15, w_25, w_35, w_45, 0]
                   ])
 
-
-    def set_eigen_current_vector(self) -> np.ndarray:
+    def _set_eigen_current_vector(self) -> np.ndarray:
         eigen_current = np.zeros(self.number_of_layers * self.neurons_in_layer+ 1)
         k = 0
         for i in range(self.board.shape[0]):
@@ -74,7 +73,7 @@ class NeuralNetwork:
         state = runge_kutta_method_matrix(x_0 = initial_state_matrix,
                                           time_array=self.time_array,
                                           dt = self.time_step,
-                                          eigen_current =self.set_eigen_current_vector(),
+                                          eigen_current =self._set_eigen_current_vector(),
                                           weights_matrix = self.weights_matrix,
                                           tuple_of_constants = self.tuple_of_constants
                                           )
