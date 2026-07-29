@@ -1,2 +1,2 @@
 Name: Toimat Tursunbek<br>
-Dieses Repository enthählt den Code für das Projekt 'Neuronensimulation' für das Modul 'Computational Physics SoSe 2026'. Das Projekt ist nach den Aufgaben unterteilt, der Text und die Visualisation liegen in den entsprechenden Orndern in Form von Jupyter Notebooks.
+Dieses Repository enthählt den Code für das Projekt 'Neuronensimulation' für das Modul 'Computational Physics SoSe 2026'. Das Projekt ist nach den Aufgaben unterteilt, der Text und die Visualisation liegen in den entsprechenden Ordnern in Form von Jupyter Notebooks.
