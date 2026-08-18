@@ -1,7 +1,9 @@
 from aufgabe2.ode_solver_euler import euler_method
 from aufgabe2.ode_solver_runge_kutta import runge_kutta_method
+from aufgabe2.ode_solver_odeint import solve_with_odeint
 import matplotlib.pyplot as plt
 import numpy as np
+import aufgabe2.performance_tester as tester
 
 V_0 = -65
 n_0 = 0.6
@@ -11,7 +13,7 @@ x = np.array([V_0,n_0, m_0, h_0])
 tuple_of_constants = (1, 36, 120, 0.3, -77, 50, -54.387)
 
 
-def visualize_a(x_0, I_0, t_a, t_b, dt):
+def visualize_euler_method(x_0, I_0, t_a, t_b, dt):
     I = lambda t: I_0
     v = euler_method(x_0, t_a, t_b, dt, I, tuple_of_constants) [0: ,0]
     tpoints = np.arange(0, 50, dt)
@@ -27,7 +29,7 @@ def visualize_a(x_0, I_0, t_a, t_b, dt):
     plt.show()
 
 
-def visualize_b(x_0, I_0, t_a, t_b, dt):
+def visualize_runge_kutta_method(x_0, I_0, t_a, t_b, dt):
     I = lambda t: I_0
     tpoints = np.arange(0, 50, dt)
     v = runge_kutta_method(x_0, t_a, t_b, dt, I, tuple_of_constants)[0:, 0]
@@ -41,6 +43,80 @@ def visualize_b(x_0, I_0, t_a, t_b, dt):
     plt.ylabel("Spannung V, mV")
     plt.grid(True)
     plt.show()
+
+
+def visualize_odeint(time_points : np.ndarray, I, dt):
+    voltage = solve_with_odeint(time_points, x, I, tuple_of_constants)
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(time_points, voltage, linewidth=2)
+    plt.title(
+        "Membran-Spannung über die Zeit berechnet mit scipy.odeint\n"
+        + rf"$V_0 = {x[0]}\,$mV, $n_0 = {x[1]}, m_0 = {x[2]}, h_0 = {x[3]}, dt = {dt}$"
+    )
+    plt.xlabel("Zeit t, ms")
+    plt.ylabel("Spannung V, mV")
+    plt.grid(True)
+    plt.show()
+
+
+def visualize_euler_performance(x_0 : np.ndarray, t_a: float, t_b :float , time_steps : np.ndarray, I_0 : float):
+    time_steps = np.arange(0.01, 1, 0.01)
+
+    result_array = tester.test_euler_runtimes(x_0, t_a, t_b, time_steps, I_0, tuple_of_constants)
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(time_steps, result_array, linewidth=2)
+    plt.title("Laufzeit gegen Zeitschritt $dt$ für das Euler-Verfahren")
+    plt.xlabel("Zeitschritt, ms")
+    plt.ylabel("Laufzeit, s")
+    plt.grid(True)
+    plt.show()
+
+    return result_array
+
+
+
+def visualize_runge_kutta_performance(x_0 : np.ndarray, t_a: float, t_b :float , time_steps : np.ndarray, I_0 : float):
+
+
+    result_array = tester.test_runge_kutta_runtimes(x_0, t_a, t_b, time_steps, I_0, tuple_of_constants)
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(time_steps, result_array, linewidth=2)
+    plt.title("Laufzeit gegen Zeitschritt $dt$ für das Runge-Kutta-Verfahren")
+    plt.xlabel("Zeitschritt, ms")
+    plt.ylabel("Laufzeit, s")
+    plt.grid(True)
+    plt.show()
+
+    return result_array
+
+def visualize_comparison(euler_array: np.ndarray, runge_kutta_array : np.ndarray, time_steps):
+
+
+    resulting_array =  runge_kutta_array / euler_array
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(time_steps, resulting_array, linewidth=2)
+    plt.title("Laufzeitverhältnis von Euler zum Runge-Kutta-Verfahren gegen Zeitschritt $dt$")
+    plt.xlabel("Zeitschritt, ms")
+    plt.ylabel("Laufzeitverhältnis")
+    plt.grid(True)
+    plt.show()
+
+def visualize_odeint_performance(x_0 : np.ndarray, t_a: float, t_b :float , time_steps : np.ndarray, I_0 : float):
+    result = tester.test_odeint(x_0, t_a, t_b, time_steps, I_0, tuple_of_constants)
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(time_steps, result, linewidth=2)
+    plt.title("Laufzeit gegen Zeitschritt $dt$ für scipy.odeint")
+    plt.xlabel("Zeitschritt, ms")
+    plt.ylabel("Laufzeit")
+    plt.grid(True)
+    plt.show()
+
+    return result
 
 def visualize_c(x_0, t_a, t_b, dt):
     plt.figure(figsize=(10, 5))

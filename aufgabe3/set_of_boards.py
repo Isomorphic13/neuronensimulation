@@ -19,6 +19,22 @@ def get_set_of_non_chess_boards() -> np.ndarray:
         [[1, 1], [0, 0]], [[1, 1], [0, 1]], [[1, 1], [1, 0]], [[1, 1], [1, 1]]
     ])
 
+def get_set_of_non_chess_boards_two_black_pixels() -> np.ndarray:
+    return np.array([
+        [[0, 0], [1, 1]],
+        [[0, 1], [0, 1]],
+        [[1, 0], [1, 0]],
+        [[1, 1], [0, 0]]
+    ])
+
+def get_set_of_boards_two_black_pixels() -> np.ndarray:
+    return np.array([
+                                                              [[0, 0], [1, 1]],
+                          [[0, 1], [0, 1]], [[0, 1], [1, 0]],
+                          [[1, 0], [0, 1]], [[1, 0], [1, 0]],
+        [[1, 1], [0, 0]]
+    ])
+
 def get_targets() -> np.ndarray:
     return np.array([
         0, 0, 0, 0,

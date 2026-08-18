@@ -160,6 +160,7 @@ def visualize_c(weights_list):
 
     plt.show()
 
+
 def visualize_d(optimal_weights):
     weights = optimal_weights
     network = NeuralNetwork(weights, 2, 2)
@@ -170,7 +171,7 @@ def visualize_d(optimal_weights):
 
     fig, ax = plt.subplots(len(boards), 1, figsize=(10, 24), sharex=True)
     ax = ax.flatten()
-    fig.suptitle("Spannungsverlauf über Zeit sowie die Aussage des Model für alle Bretten.")
+    fig.suptitle("Spannungsverlauf und Modellvorhersagen für alle Bretten")
     fig.subplots_adjust(top=0.9, hspace=0.3)
 
     i = 0
@@ -184,15 +185,55 @@ def visualize_d(optimal_weights):
         voltage_max = round(voltage.max(), 2)
         voltage_mean = round(voltage.mean(), 2)
         board_label = (
-                    f"{'Schach' if np.array_equal(b, cb1) or np.array_equal(b, cb2) else ''}Brett:\n{'▣' if b[0, 0] == 1 else '▢'} {'▣' if b[0, 1] == 1 else '▢'} \n{'▣' if b[1, 0] == 1 else '▢'} {'▣' if b[1, 1] == 1 else '▢'} \n"
-                    + "Aussage:" + f"{'Ja' if voltage_max >= 0 else 'Nein'}")
+                    f"{'Schach ' if np.array_equal(b, cb1) or np.array_equal(b, cb2) else ''}Brett:\n"
+                    f"{'▣' if b[0, 0] == 1 else '▢'} {'▣' if b[0, 1] == 1 else '▢'} \n"
+                    f"{'▣' if b[1, 0] == 1 else '▢'} {'▣' if b[1, 1] == 1 else '▢'} \n"
+                    + "Aussage: " + f"{'Ja' if voltage_max >= 0 else 'Nein'}")
         ax[i].plot(tpoints, voltage, label=board_label)
         ax[i].legend(loc='center left', bbox_to_anchor=(1, 0.5))
         i += 1
 
-    ax[-1].set_xlabel("Zeit, (ms)")
+    ax[-1].set_xlabel("Zeit, ms")
 
     plt.show()
+
+
+def visualize_d_corrected(optimal_weights):
+    weights = optimal_weights
+    network = NeuralNetwork(weights, 2, 2)
+    network.set_time_array(np.arange(0, 20, 0.01))
+    boards = set_of_boards.get_set_of_boards_two_black_pixels()
+
+    tpoints = network.time_array
+
+    fig, ax = plt.subplots(len(boards), 1, figsize=(10, 24), sharex=True)
+    ax = ax.flatten()
+    fig.suptitle("Spannungsverlauf und Modellvorhersagen für alle Bretter")
+    fig.subplots_adjust(top=0.9, hspace=0.3)
+
+    i = 0
+
+    cb1 = set_of_boards.get_set_of_chess_boards()[0]
+    cb2 = set_of_boards.get_set_of_chess_boards()[1]
+
+    for b in boards:
+        network.input_board(b)
+        voltage = network.get_deciding_neuron_voltage()
+        voltage_max = round(voltage.max(), 2)
+        voltage_mean = round(voltage.mean(), 2)
+        board_label = (
+                    f"{'Schach' if np.array_equal(b, cb1) or np.array_equal(b, cb2) else ''}Brett:\n"
+                    f"{'▣' if b[0, 0] == 1 else '▢'} {'▣' if b[0, 1] == 1 else '▢'} \n"
+                    f"{'▣' if b[1, 0] == 1 else '▢'} {'▣' if b[1, 1] == 1 else '▢'} \n"
+                    + "Aussage: " + f"{'Ja' if voltage_max >= 0 else 'Nein'}")
+        ax[i].plot(tpoints, voltage, label=board_label)
+        ax[i].legend(loc='center left', bbox_to_anchor=(1, 0.5))
+        i += 1
+
+    ax[-1].set_xlabel("Zeit, ms")
+
+    plt.show()
+
 
 def visualize_error_history(error_history):
     tpoints = np.arange(0, len(error_history), 1)
@@ -200,9 +241,10 @@ def visualize_error_history(error_history):
     plt.plot(tpoints, error_history, linewidth=2)
     plt.xlabel("Anzahl der Iterationen")
     plt.ylabel("Fehler pro Iteration")
-    plt.title("Anzahl der Fehler pro Iteration"
-    )
+    plt.title("Verlauf von Fehler pro Iteration")
     plt.grid(True)
+    plt.show
+
 
 def visualize_weights_history(weights_history):
 

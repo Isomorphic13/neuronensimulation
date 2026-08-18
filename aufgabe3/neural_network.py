@@ -53,7 +53,7 @@ class NeuralNetwork:
             [w_15, w_25, w_35, w_45, 0]
                   ])
 
-    def _set_eigen_current_vector(self) -> np.ndarray:
+    def _set_eigen_current_vector(self) -> np.ndarray: #gives current to each receptor neuron depending on the input board
         eigen_current = np.zeros(self.number_of_layers * self.neurons_in_layer+ 1)
         k = 0
         for i in range(self.board.shape[0]):
@@ -68,7 +68,7 @@ class NeuralNetwork:
     def get_weights(self):
         return self.weights
 
-    def get_state_matrix(self) -> np.ndarray:
+    def get_state_matrix(self) -> np.ndarray: #calculates the state vectors for the whole network as a state matrix
         initial_state_matrix = np.tile(self.initial_state[:, None], (1, self.number_of_layers * self.neurons_in_layer + 1))
         state = runge_kutta_method_matrix(x_0 = initial_state_matrix,
                                           time_array=self.time_array,
@@ -80,7 +80,7 @@ class NeuralNetwork:
 
         return state
 
-    def get_deciding_neuron_voltage(self) -> np.ndarray:
+    def get_deciding_neuron_voltage(self) -> np.ndarray: #returns voltage function on the last deciding neuron
         return self.get_state_matrix()[:, 0, self.number_of_layers * self.neurons_in_layer]
 
 

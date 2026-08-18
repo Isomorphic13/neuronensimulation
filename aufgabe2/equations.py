@@ -146,7 +146,7 @@ def equations_vector(x_0 : np.ndarray, I, tuple_of_constants : tuple[float] ) ->
           - G_NA * (m ** 3) * h * (voltage - V_NA)
           - G_L * (voltage - V_L)) / C
 
-    return np.array([dvdt, dndt, dmdt, dhdt]) #return the whole state of the sytem
+    return np.array([dvdt, dndt, dmdt, dhdt]) #return the numerical values of ODE of the system for time some time point
 
 @njit
 def equations_matrix(x_0 : np.ndarray, I, tuple_of_constants : tuple[float] ) -> np.ndarray:
